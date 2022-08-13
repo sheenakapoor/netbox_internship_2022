@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # noqa E501
 # pylint: disable= R0914, R0912, R0915, C0301
 """Script updates creation/ deletion/ modification of device/ vm/ interface."""
@@ -99,7 +99,7 @@ def json2yaml(json_data, yaml_data):
 
 if __name__ == "__main__":
     # Environment variable for JSON file
-    nb_data_file = os.environ.get('NETBOX_PAYLOAD_FILES')
+    nb_data_file = os.environ.get('NETBOX_PAYLOAD_FILE')
     if nb_data_file is None:
         # Setting environment variable manually
         temp_file = input("Enter name of temp file: ")
@@ -108,7 +108,7 @@ if __name__ == "__main__":
     with open(nb_data_file, "r", encoding="utf8") as handle:
         json_parsed = json.load(handle)
     # Environment variable for YAML file
-    input_file = os.environ.get('NETBOX_YAML_FILES')
+    input_file = os.environ.get('NETBOX_YAML_FILE')
     if input_file is None:
         # Setting environment variable manually
         input_file = input("Enter name of file to be edited: ")
@@ -119,10 +119,10 @@ if __name__ == "__main__":
         except yaml.YAMLError as exc:
             print(exc)
     # Make changes
-    json2yaml(json_parsed, yaml_parsed)
+    yaml_data = json2yaml(json_parsed, yaml_parsed)
     # Write in file, close
-    with open("output_file.yaml", "w", encoding="utf8") as stream:
-        yaml.safe_dump(yaml_parsed, stream)
-        print("The value has been updated!")
+    with open(input_file, "w", encoding="utf8") as stream:
         yaml.explicit_end = True
+        yaml.safe_dump(yaml_data, stream)
+        print("The value has been updated!")
     stream.close()
