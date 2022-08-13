@@ -1,0 +1,11 @@
+stages:
+  - linting
+
+linting:
+  stage: linting
+  image: registry.gitlab.com/mafda/python-linting
+  script:
+    - flake8 .
+    - find . -type f -name "*.py" | xargs pylint
+  only:
+    - merge_requests
